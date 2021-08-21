@@ -80,7 +80,9 @@ var DiffCamEngine = (function() {
 		var constraints = {
 			audio: false,
 			video: { width: captureWidth, height: captureHeight },
-            facingMode: 'environment'
+            facingMode: {
+				exact: 'environment'
+			}
 		};
 
 		navigator.mediaDevices.getUserMedia(constraints)
