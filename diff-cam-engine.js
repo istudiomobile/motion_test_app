@@ -82,10 +82,10 @@ var DiffCamEngine = (function() {
 			video: {
         width: captureWidth,
         height: captureHeight,
-				facingMode: {
-					exact: 'environment'
-				}
-      },
+				mandatory: {
+          facingMode: 'environment'
+        }
+      }
 		};
 
 		navigator.mediaDevices.getUserMedia(constraints)
