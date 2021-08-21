@@ -82,9 +82,7 @@ var DiffCamEngine = (function() {
 			video: {
         width: captureWidth,
         height: captureHeight,
-        facingMode: {
-          exact: 'environment'
-        }
+        facingMode: 'environment'
       }
 		};
 
