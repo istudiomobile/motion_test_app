@@ -79,7 +79,8 @@ var DiffCamEngine = (function() {
 	function requestWebcam() {
 		var constraints = {
 			audio: false,
-			video: { width: captureWidth, height: captureHeight }
+			video: { width: captureWidth, height: captureHeight },
+            facingMode: 'environment'
 		};
 
 		navigator.mediaDevices.getUserMedia(constraints)
