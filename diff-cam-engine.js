@@ -84,7 +84,6 @@ var DiffCamEngine = (function() {
       return;
     }
 
-    var backCameraId;
     const inputDevice = navigator.mediaDevices.enumerateDevices().then(function(devices) {
       var printThis = "";
       for(var i = 0; i < devices.length; i++){
@@ -92,24 +91,11 @@ var DiffCamEngine = (function() {
           printThis += "<br>"+devices[i]['label'];
       }
       document.getElementById('ids').innerHTML = printThis;
-      /* devices.forEach (device => {
-        if( device.kind === 'videoinput' ) {
-          if( device.label && device.label.length > 0 ) {
-            if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
-              backCameraId = device.deviceId
-              document.getElementById('ids').innerHTML = backCameraId;
-            }
-            else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
-              frontDeviceId = device.deviceId
-            }
-          }
-        }
-      }) */
 
       return devices.filter(device => device.kind === 'videoinput');
 
     });
-    return inputDevice.then(device => device[0].deviceId);
+    return inputDevice.then(device => device[2].deviceId);
   }
 
 	function requestWebcam(id) {
