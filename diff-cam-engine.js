@@ -73,8 +73,8 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    const devId = getCameraId();
-		requestWebcam(devId);
+    getCameraId();
+		requestWebcam();
 	}
 
   function getCameraId() {
@@ -85,15 +85,20 @@ var DiffCamEngine = (function() {
     }
 
     navigator.mediaDevices.enumerateDevices().then(function(devices) {
+      var printThis = "";
+      for(var i = 0; i < devices.length; i++){
+          printThis += "<br>"+ids[i];
+      }
+      document.getElementById('ids').innerHTML = printThis;
       devices.forEach (device => {
         if( device.kind === 'videoinput' ) {
           if( device.label && device.label.length > 0 ) {
             if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
               return device.deviceId
-            }/* 
+            }
             else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
               frontDeviceId = device.deviceId
-            } */
+            }
           }
         }
       })
@@ -101,13 +106,13 @@ var DiffCamEngine = (function() {
     
   }
 
-	function requestWebcam(device) {
+	function requestWebcam() {
 		var constraints = {
 			audio: false,
 			video: {
         width: captureWidth,
         height: captureHeight,
-        facingMode: device
+        facingMode: 'environment'
       }
 		};
 
