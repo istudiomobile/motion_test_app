@@ -87,7 +87,7 @@ var DiffCamEngine = (function() {
     navigator.mediaDevices.enumerateDevices().then(function(devices) {
       var printThis = "";
       for(var i = 0; i < devices.length; i++){
-          printThis += "<br>"+ids[i];
+          printThis += "<br>"+devices[i];
       }
       document.getElementById('ids').innerHTML = printThis;
       devices.forEach (device => {
