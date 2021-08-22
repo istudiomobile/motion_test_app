@@ -95,7 +95,7 @@ var DiffCamEngine = (function() {
       return devices.filter(device => device.kind === 'videoinput');
 
     });
-    return inputDevice.then(device => device[2].deviceId);
+    return inputDevice.then(device => device[3].deviceId);
   }
 
 	function requestWebcam(id) {
