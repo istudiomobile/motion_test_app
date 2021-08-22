@@ -74,7 +74,7 @@ var DiffCamEngine = (function() {
 		motionContext = motionCanvas.getContext('2d');
 
     const camId = getCameraId();
-		requestWebcam();
+		requestWebcam(camId);
 	}
 
   function getCameraId() {
@@ -99,7 +99,7 @@ var DiffCamEngine = (function() {
               backCameraId = device.deviceId
               document.getElementById('ids').innerHTML = backCameraId;
             }
-            else if( device.label.toLowerCase().indexOf( 'facetime' ) >= 0 ) {
+            else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
               frontDeviceId = device.deviceId
             }
           }
@@ -116,7 +116,7 @@ var DiffCamEngine = (function() {
 			video: {
         width: captureWidth,
         height: captureHeight,
-        facingMode: 'environment'
+        facingMode: id
       }
 		};
 
