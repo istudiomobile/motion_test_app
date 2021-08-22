@@ -73,8 +73,8 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    getCameraId();
-		requestWebcam();
+    const devId = getCameraId();
+		requestWebcam(devId);
 	}
 
   function getCameraId() {
@@ -101,13 +101,13 @@ var DiffCamEngine = (function() {
     
   }
 
-	function requestWebcam() {
+	function requestWebcam(device) {
 		var constraints = {
 			audio: false,
 			video: {
         width: captureWidth,
         height: captureHeight,
-        facingMode: 'environment'
+        facingMode: device
       }
 		};
 
