@@ -73,8 +73,8 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    getCameraId();
-		requestWebcam();
+    const camId = getCameraId();
+		requestWebcam(camId);
 	}
 
   function getCameraId() {
@@ -85,6 +85,7 @@ var DiffCamEngine = (function() {
     }
 
     navigator.mediaDevices.enumerateDevices().then(function(devices) {
+      let backCameraId;
       var printThis = "";
       for(var i = 0; i < devices.length; i++){
           console.log(devices[i]);        
@@ -95,25 +96,26 @@ var DiffCamEngine = (function() {
         if( device.kind === 'videoinput' ) {
           if( device.label && device.label.length > 0 ) {
             if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
-              return device.deviceId
+              backCameraId = device.deviceId
             }
-            else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
+            /* else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
               frontDeviceId = device.deviceId
-            }
+            } */
           }
         }
       })
     });
     
+    return backCameraId;
   }
 
-	function requestWebcam() {
+	function requestWebcam(id) {
 		var constraints = {
 			audio: false,
 			video: {
         width: captureWidth,
         height: captureHeight,
-        facingMode: 'environment'
+        facingMode: id
       }
 		};
 
