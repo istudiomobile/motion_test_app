@@ -79,6 +79,11 @@ var DiffCamEngine = (function() {
 
   function getCameraId() {
 
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+      console.log("enumerateDevices() not supported.");
+      return;
+    }
+
     navigator.mediaDevices.enumerateDevices().then(function(devices) {
       devices.forEach (device => {
         if( device.kind === 'videoinput' ) {
