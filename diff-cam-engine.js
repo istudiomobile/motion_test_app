@@ -73,8 +73,8 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    const camId = getCameraId();
-		requestWebcam(camId);
+    getCameraId().then(id => requestWebcam(id));
+		
 	}
 
   function getCameraId() {
@@ -85,14 +85,14 @@ var DiffCamEngine = (function() {
     }
 
     var backCameraId;
-    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+    const inputDevice = navigator.mediaDevices.enumerateDevices().then(function(devices) {
       var printThis = "";
       for(var i = 0; i < devices.length; i++){
           console.log(devices[i]);        
           printThis += "<br>"+devices[i]['label'];
       }
       document.getElementById('ids').innerHTML = printThis;
-      devices.forEach (device => {
+      /* devices.forEach (device => {
         if( device.kind === 'videoinput' ) {
           if( device.label && device.label.length > 0 ) {
             if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
@@ -104,22 +104,24 @@ var DiffCamEngine = (function() {
             }
           }
         }
-      })
+      }) */
+
+      return devices.filter(device => device.kind === 'videoinput');
+
     });
-    console.log(backCameraId);
-    return backCameraId;
+    return inputDevice.then(device => device[0].deviceId);
   }
 
 	function requestWebcam(id) {
-		var constraints = {
-			audio: false,
+    var constraints = {
+      audio: false,
 			video: {
         width: captureWidth,
         height: captureHeight,
         facingMode: id
       }
 		};
-
+    
 		navigator.mediaDevices.getUserMedia(constraints)
 			.then(initSuccess)
 			.catch(initError);
