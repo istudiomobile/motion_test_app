@@ -73,7 +73,7 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    // const camId = getCameraId();
+    const camId = getCameraId();
 		requestWebcam();
 	}
 
@@ -97,15 +97,16 @@ var DiffCamEngine = (function() {
           if( device.label && device.label.length > 0 ) {
             if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
               backCameraId = device.deviceId
+              document.getElementById('ids').innerHTML = backCameraId;
             }
-            /* else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
+            else if( device.label.toLowerCase().indexOf( 'facetime' ) >= 0 ) {
               frontDeviceId = device.deviceId
-            } */
+            }
           }
         }
       })
     });
-    
+    console.log(backCameraId);
     return backCameraId;
   }
 
