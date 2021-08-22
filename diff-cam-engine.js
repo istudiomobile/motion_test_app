@@ -89,11 +89,11 @@ var DiffCamEngine = (function() {
         if( device.kind === 'videoinput' ) {
           if( device.label && device.label.length > 0 ) {
             if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
-              backDeviceId = device.deviceId
-            }
+              return device.deviceId
+            }/* 
             else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
               frontDeviceId = device.deviceId
-            }
+            } */
           }
         }
       })
