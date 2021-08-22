@@ -73,8 +73,27 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
+    getCameraId();
 		requestWebcam();
 	}
+
+  function getCameraId() {
+
+    const devices = navigator.mediaDevices.enumerateDevices();
+
+    devices.forEach (device => {
+      if( device.kind === 'videoinput' ) {
+        if( device.label && device.label.length > 0 ) {
+          if( device.label.toLowerCase().indexOf( 'back' ) >= 0 ) {
+            backDeviceId = device.deviceId
+          }
+          else if( device.label.toLowerCase().indexOf( 'front' ) >= 0 ) {
+            frontDeviceId = device.deviceId
+          }
+        }
+      }
+    })
+  }
 
 	function requestWebcam() {
 		var constraints = {
