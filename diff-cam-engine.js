@@ -84,7 +84,7 @@ var DiffCamEngine = (function() {
       return;
     }
 
-    let backCameraId;
+    var backCameraId;
     navigator.mediaDevices.enumerateDevices().then(function(devices) {
       var printThis = "";
       for(var i = 0; i < devices.length; i++){
