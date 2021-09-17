@@ -25,6 +25,13 @@ var DiffCamEngine = (function() {
 	var includeMotionBox;		// flag to calculate and draw motion bounding box
 	var includeMotionPixels;	// flag to create object denoting pixels with motion
 
+	/* get user's permission to muck around with video devices */
+	const tempStream = await navigator.mediaDevices.getUserMedia({video:true})
+	const devices = navigator.mediaDevices.enumerateDevices()
+
+	var frontDeviceId // Front-facing camera
+	var backDeviceId // Rear-facing camera
+
 	function init(options) {
 		// sanity check
 		if (!options) {
@@ -73,44 +80,51 @@ var DiffCamEngine = (function() {
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
 
-    getCameraId().then(id => requestWebcam(id));
-		
+		getDeviceIDs();
 	}
 
-  function getCameraId() {
+	function requestWebcam(constraints) {
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-      console.log("enumerateDevices() not supported.");
-      return;
-    }
-
-    const inputDevice = navigator.mediaDevices.enumerateDevices().then(function(devices) {
-      var printThis = "";
-      for(var i = 0; i < devices.length; i++){
-          console.log(devices[i]);        
-          printThis += "<br>"+devices[i]['label'];
-      }
-      document.getElementById('ids').innerHTML = printThis;
-
-      return devices.filter(device => device.kind === 'videoinput');
-
-    });
-    return inputDevice.then(device => device[0].deviceId);
-  }
-
-	function requestWebcam(id) {
-    var constraints = {
-      audio: false,
-			video: {
-        width: captureWidth,
-        height: captureHeight,
-        facingMode: id
-      }
-		};
-    
 		navigator.mediaDevices.getUserMedia(constraints)
 			.then(initSuccess)
 			.catch(initError);
+	}
+
+	function getDeviceIDs() {
+
+		if (devices.length > 0) {
+			/* defaults so all this will work on a desktop */
+			frontDeviceId = devices[0].deviceId;
+			backDeviceId = devices[0].deviceId;
+		}
+
+		devices.forEach(device => {
+			if (device.kind === 'videoinput') {
+				if (device.label && device.label.length > 0) {
+					if (device.label.toLowerCase().indexOf( 'back' ) >= 0) {
+						backDeviceId = device.deviceId
+					} else if (device.label.toLowerCase().indexOf( 'front' ) >= 0) {
+						frontDeviceId = device.deviceId
+					}
+				}
+			}
+		})
+
+		/* close the temp stream */
+		const tracks = tempStream.getTracks()
+		if (tracks) {
+			for (let t = 0; t < tracks.length; t++) {
+				tracks[t].stop()
+			}
+		}
+		/* open the device you want */
+		const constraints = {
+			audio: false,
+			video: { width: captureWidth, height: captureHeight },
+			deviceId: {exact: backDeviceId }
+		}
+
+		requestWebcam(constraints);
 	}
 
 	function initSuccess(requestedStream) {
