@@ -14,10 +14,12 @@ function capture(payload) {
 	score.textContent = payload.score;
 }
 
-DiffCamEngine.init({
-	video: video,
-	motionCanvas: canvas,
-	initSuccessCallback: initSuccess,
-	initErrorCallback: initError,
-	captureCallback: capture
+	DiffCamEngine.then(resp => {
+		resp.init({
+		video: video,
+		motionCanvas: canvas,
+		initSuccessCallback: initSuccess,
+		initErrorCallback: initError,
+		captureCallback: capture
+	});
 });

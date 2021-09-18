@@ -1,4 +1,4 @@
-var DiffCamEngine = (function() {
+var DiffCamEngine = (async function() {
 	var stream;					// stream obtained from webcam
 	var video;					// shows stream
 	var captureCanvas;			// internal canvas for capturing full images from video
@@ -26,11 +26,11 @@ var DiffCamEngine = (function() {
 	var includeMotionPixels;	// flag to create object denoting pixels with motion
 
 	/* get user's permission to muck around with video devices */
-	const tempStream = await navigator.mediaDevices.getUserMedia({video:true})
-	const devices = navigator.mediaDevices.enumerateDevices()
+	const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
+	const devices = await navigator.mediaDevices.enumerateDevices();
 
-	var frontDeviceId // Front-facing camera
-	var backDeviceId // Rear-facing camera
+	var frontDeviceId; // Front-facing camera
+	var backDeviceId; // Rear-facing camera
 
 	function init(options) {
 		// sanity check
@@ -93,22 +93,20 @@ var DiffCamEngine = (function() {
 	function getDeviceIDs() {
 
 		if (devices.length > 0) {
-			/* defaults so all this will work on a desktop */
-			frontDeviceId = devices[0].deviceId;
-			backDeviceId = devices[0].deviceId;
-		}
-
-		devices.forEach(device => {
-			if (device.kind === 'videoinput') {
-				if (device.label && device.label.length > 0) {
-					if (device.label.toLowerCase().indexOf( 'back' ) >= 0) {
-						backDeviceId = device.deviceId
-					} else if (device.label.toLowerCase().indexOf( 'front' ) >= 0) {
-						frontDeviceId = device.deviceId
+			devices.forEach(device => {
+				if (device.kind === 'videoinput') {
+					if (device.label && device.label.length > 0) {
+						if (device.label.toLowerCase().indexOf('back') >= 0) {
+							backDeviceId = device.deviceId
+						} else if (device.label.toLowerCase().indexOf('front') >= 0) {
+							frontDeviceId = device.deviceId
+						}
 					}
 				}
-			}
-		})
+			});
+		}
+
+
 
 		/* close the temp stream */
 		const tracks = tempStream.getTracks()
