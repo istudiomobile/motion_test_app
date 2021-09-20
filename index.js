@@ -3,7 +3,7 @@ var canvas = document.getElementById('motion');
 var score = document.getElementById('score');
 
 function initSuccess() {
-	DiffCamEngine.start();
+	DiffCamEngine.then(resp => resp.start());
 }
 
 function initError() {
@@ -14,12 +14,13 @@ function capture(payload) {
 	score.textContent = payload.score;
 }
 
-	DiffCamEngine.then(resp => {
-		resp.init({
-		video: video,
-		motionCanvas: canvas,
-		initSuccessCallback: initSuccess,
-		initErrorCallback: initError,
-		captureCallback: capture
-	});
+DiffCamEngine.then(resp => {
+	resp.init({
+	video: video,
+	motionCanvas: canvas,
+	initSuccessCallback: initSuccess,
+	initErrorCallback: initError,
+	captureCallback: capture
+});
+
 });
