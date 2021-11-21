@@ -8,7 +8,7 @@ var DiffCamEngine = (async function() {
 	var motionCanvas;			// receives processed diff images
 	var motionContext;			// context for motion canvas
 
-	var initSuccessCallback;	// called when init succeeds
+	var  Callback;	// called when init succeeds
 	var initErrorCallback;		// called when init fails
 	var startCompleteCallback;	// called when start is complete
 	var captureCallback;		// called when an image has been captured and diffed
